@@ -1,48 +1,54 @@
-Overview
-========
+# Fraud Detection Pipeline
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+This repository contains a machine learning pipeline for detecting fraudulent transactions using a Random Forest classifier. The pipeline is built using Apache Airflow for orchestration and includes data extraction, transformation, and model training.
 
-Project Contents
-================
+## Overview
 
-Your Astro project contains the following files and folders:
+The fraud detection pipeline performs the following steps:
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes one example DAG:
-    - `example_astronauts`: This DAG shows a simple ETL pipeline example that queries the list of astronauts currently in space from the Open Notify API and prints a statement for each astronaut. The DAG uses the TaskFlow API to define tasks in Python, and dynamic task mapping to dynamically print a statement for each astronaut. For more on how this DAG works, see our [Getting started tutorial](https://www.astronomer.io/docs/learn/get-started-with-airflow).
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+1. **Extract**: Load the dataset from a CSV file.
+2. **Transform**: Preprocess the data, including feature scaling and engineering.
+3. **Load**: Train a Random Forest model on the processed data and save the model for future use.
 
-Deploy Your Project Locally
-===========================
+## Requirements
 
-1. Start Airflow on your local machine by running 'astro dev start'.
+- **Python 3.x**
+- **Pandas**
+- **Scikit-learn**
+- **Joblib**
+- **Apache Airflow**
 
-This command will spin up 4 Docker containers on your machine, each for a different Airflow component:
+## Installation
 
-- Postgres: Airflow's Metadata Database
-- Webserver: The Airflow component responsible for rendering the Airflow UI
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- Triggerer: The Airflow component responsible for triggering deferred tasks
+1. Clone this repository:
+git clone https://github.com/Engineered0/fraud-detection-pipeline.git
+cd fraud-detection-pipeline
 
-2. Verify that all 4 Docker containers were created by running 'docker ps'.
+pip install -r requirements.txt
 
-Note: Running 'astro dev start' will start your project with the Airflow Webserver exposed at port 8080 and Postgres exposed at port 5432. If you already have either of those ports allocated, you can either [stop your existing Docker containers or change the port](https://www.astronomer.io/docs/astro/cli/troubleshoot-locally#ports-are-not-available-for-my-local-airflow-webserver).
 
-3. Access the Airflow UI for your local Airflow project. To do so, go to http://localhost:8080/ and log in with 'admin' for both your Username and Password.
+## Dataset
 
-You should also be able to access your Postgres Database at 'localhost:5432/postgres'.
+The dataset used in this pipeline is assumed to be located at `/usr/local/airflow/dags/creditcard.csv`. Make sure to place your dataset in this path or update the `DATASET_PATH` variable in the code accordingly.
 
-Deploy Your Project to Astronomer
-=================================
+## Usage
 
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://www.astronomer.io/docs/astro/deploy-code/
+1. Start your Apache Airflow server.
+2. Place the DAG file in your Airflow `dags` directory.
+3. Trigger the `fraud_detection_pipeline` DAG from the Airflow UI.
 
-Contact
-=======
+## Output
 
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+The trained model will be saved as `fraud_detection_model.pkl` in the `/usr/local/airflow/dags/` directory upon successful completion of the pipeline.
+
+## Example Output
+
+The pipeline will output a classification report and confusion matrix after training, providing insights into model performance.
+
+## Contributing
+
+Feel free to submit issues or pull requests if you have suggestions for improvements or enhancements.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
